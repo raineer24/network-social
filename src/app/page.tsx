@@ -5,15 +5,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div>
-      <SignedOut>
-        <SignInButton mode="modal">
-          <Button>Sign In</Button>
-        </SignInButton>
-      </SignedOut>
-
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
+      <h1>home page content</h1>
     </div>
   );
 }
