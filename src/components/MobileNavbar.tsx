@@ -21,7 +21,9 @@ import {
     return (
     <div className="flex md:hidden items-center space-x-2">
         <Button variant='ghost' size='icon' className="mr-2">
-        <span>Toggle theme</span>
+        <SunIcon />
+        <MoonIcon />
+        <span className="sr-only">Toggle theme</span>
         </Button>
         
     </div>
