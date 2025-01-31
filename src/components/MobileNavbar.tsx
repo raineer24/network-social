@@ -19,9 +19,11 @@ import {
   
   function MobileNavbar() {
     return (
-    <div>
-        <Button></Button>
+    <div className="flex md:hidden items-center space-x-2">
+        <Button variant='ghost' size='icon' className="mr-2">
         <span>Toggle theme</span>
+        </Button>
+        
     </div>
     )
   }
