@@ -18,6 +18,8 @@ import {
 
   
   function MobileNavbar() {
+    const [showMobileMenu, setShowMobileMenu ] = useState(false);
+    const { isSignedIn } = useAuth();
     const { theme, setTheme } = useTheme();
 
     return (
@@ -31,10 +33,10 @@ import {
         </Button>
         
 
-    <Sheet>
+    <Sheet open={showMobileMenu} onOpenChange={setShowMobileMenu}>
       <SheetTrigger asChild>
-        <Button variant="ghost">
-            <MenuIcon />
+        <Button variant="ghost" size='icon'>
+            <MenuIcon className="h-5 w-5" />
         </Button>
       </SheetTrigger>
       <SheetContent>
