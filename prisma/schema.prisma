@@ -35,7 +35,7 @@ model User {
   followers Follows[] @relation("following") // Users who follow this user
   following Follows[] @relation("follower") // users  this user follows
 
-   notifications Notification[] @relation("userNotifications") // notifications received by a user
+  notifications       Notification[] @relation("userNotifications") // notifications received by a user
   notificationCreated Notification[] @relation("notificationCreator") // notifications triggered by a user
 }
 
@@ -107,9 +107,9 @@ model Notification {
   createdAt DateTime         @default(now())
 
   // Relations
-  user      User @relation("userNotifications", fields: [userId], references: [id], onDelete: Cascade)
-  creator User @relation("notificationCreator",fields: [creatorId], references: [id], onDelete: Cascade) 
-  post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user    User     @relation("userNotifications", fields: [userId], references: [id], onDelete: Cascade)
+  creator User     @relation("notificationCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
