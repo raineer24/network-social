@@ -33,6 +33,9 @@ export async function syncUser() {
    } catch (error) {
     console.log('Error in syncuser', error)
    }
+}
 
+export async function getUserByClerkId(clerkId:string) {
+    
 }
 

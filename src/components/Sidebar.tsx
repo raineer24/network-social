@@ -1,12 +1,14 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 
 async function Sidebar() {
-  return (
-    <div>Sidebar</div>
-  )
+  const authUser = await currentUser();
+  if(!authUser) return <UnAuthenticatedSidebar />; 
+
+   return <div>Sidebar</div>;
+ 
 }
 
 export default Sidebar;
