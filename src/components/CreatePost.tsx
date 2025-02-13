@@ -14,7 +14,20 @@ function CreatePost() {
   const [isPosting, setIsPosting] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    if (!content.trim() && !imageUrl) return;
+
+    setIsPosting(true);
+    try {
+        
+    } catch (error) {
+        console.log('Failed to create post:', error);
+        
+    } finally {
+        setIsPosting(false);
+    }
+
+  };
 
   return (
     <Card className="mb-6">
@@ -36,11 +49,19 @@ function CreatePost() {
           {/* bUTTON */}
 
           <div className="flex items-center justify-between border">
-            {/* <div className="flex space-x-2">
-                <Button className="text-muted-foreground" type="button" variant='ghost' size='sm'>
+            <div className="flex space-x-2">
+                <Button 
+                className="text-muted-foreground hover:text-primary" 
+                onClick={() => setShowImageUpload(!showImageUpload)}
+                type="button" 
+                variant='ghost' 
+                size='sm'
+                disabled={isPosting}
+                >
+                
                         <ImageIcon />Photo
                 </Button>
-            </div> */}
+            </div>
             <Button
                 className="flex items-center"
                 onClick={handleSubmit}
@@ -54,6 +75,7 @@ function CreatePost() {
                 ): (
                     <>
                     <SendIcon className="size-4 mr-2" />
+                    Post
                     </>
                 )}
             </Button>

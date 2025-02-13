@@ -52,3 +52,7 @@ export async function getUserByClerkId(clerkId:string) {
     });
 }
 
+
+export async function getDbUserId() {
+    
+}
