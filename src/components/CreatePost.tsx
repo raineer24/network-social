@@ -7,10 +7,13 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
 import { ImageIcon, Loader2Icon, SendIcon } from "lucide-react";
 import { Button } from "./ui/button";
+import { createPost } from "@/actions/post.action";
+import toast from "react-hot-toast";
+
 function CreatePost() {
   const { user } = useUser();
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const [isPosting, setIsPosting] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
 
@@ -19,10 +22,18 @@ function CreatePost() {
 
     setIsPosting(true);
     try {
-        
+        const result = await createPost(content, imageUrl);
+        if (result?.success) {
+            //reset the form
+            setContent("");
+            setImageUrl("");
+            setShowImageUpload(false);
+
+            toast.success("Post created successfully");
+        }
     } catch (error) {
         console.log('Failed to create post:', error);
-        
+        toast.error("Failed to create post");
     } finally {
         setIsPosting(false);
     }
