@@ -15,12 +15,12 @@ export async function createPost(content: string, image: string) {
             content,
             image,
             authorId: userId,
-        }
-    })
+        },
 
-    if(!userId) return;
+    });
 
     revalidatePath('/'); // puruge the cache for the home page
+    return { success: true, post};
   } catch (error) {
     console.error('Failed to create post:', error);
     return { success: false, error: 'Failed to create post'};

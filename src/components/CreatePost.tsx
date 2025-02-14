@@ -23,6 +23,7 @@ function CreatePost() {
     setIsPosting(true);
     try {
         const result = await createPost(content, imageUrl);
+        console.log('result', result);
         if (result?.success) {
             //reset the form
             setContent("");
@@ -48,18 +49,18 @@ function CreatePost() {
             <Avatar className="w-10 h-10">
                 <AvatarImage src={user?.imageUrl || '/avatar.png' } />
             </Avatar>
-            <Textarea 
-                placeholder="What's on your mind?"
-                className="min-h-[100px] resize-none border-none focus-visible:ring-0 p-0 text-base"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                disabled={isPosting}
+            <Textarea
+              placeholder="What's on your mind?"
+              className="min-h-[100px] resize-none border-none focus-visible:ring-0 p-0 text-base"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              disabled={isPosting}
             />
           </div>
 
           {/* bUTTON */}
 
-          <div className="flex items-center justify-between border">
+          <div className="flex items-center justify-between border-t pt-4">
             <div className="flex space-x-2">
                 <Button 
                 className="text-muted-foreground hover:text-primary" 
@@ -70,7 +71,7 @@ function CreatePost() {
                 disabled={isPosting}
                 >
                 
-                        <ImageIcon />Photo
+                        <ImageIcon className="size-4 mr-2" />Photo
                 </Button>
             </div>
             <Button
@@ -80,7 +81,7 @@ function CreatePost() {
             >
                 {isPosting ? (
                     <>
-                    <Loader2Icon />
+                    <Loader2Icon className="size-4 mr-2 animate-spin" />
                     Posting...
                     </>
                 ): (
