@@ -3,63 +3,90 @@ import { auth, currentUser, EmailAddress } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 export async function syncUser() {
-  
-   try {
+  try {
     const { userId } = await auth();
     const user = await currentUser();
 
     if (!userId || !user) return;
 
     const existingUser = await prisma.user.findUnique({
-        where: {
-            clerkId: userId,
-        },
+      where: {
+        clerkId: userId,
+      },
     });
 
-    if(existingUser) return existingUser;
+    if (existingUser) return existingUser;
 
     const dbUser = await prisma.user.create({
-        data: {
-            clerkId: userId,
-            name: `${user.firstName || ""} ${user.lastName || ""}`,
-            username: user.username ?? user.emailAddresses[0].emailAddress.split("@")[0],
-            email: user.emailAddresses[0].emailAddress ,
-            image: user.imageUrl,
-
-        },
+      data: {
+        clerkId: userId,
+        name: `${user.firstName || ""} ${user.lastName || ""}`,
+        username:
+          user.username ?? user.emailAddresses[0].emailAddress.split("@")[0],
+        email: user.emailAddresses[0].emailAddress,
+        image: user.imageUrl,
+      },
     });
 
     return dbUser;
-   } catch (error) {
-    console.log('Error in syncuser', error)
-   }
+  } catch (error) {
+    console.log("Error in syncuser", error);
+  }
 }
 
-export async function getUserByClerkId(clerkId:string) {
-    return prisma.user.findUnique({
-        where: {
-            clerkId,
+export async function getUserByClerkId(clerkId: string) {
+  return prisma.user.findUnique({
+    where: {
+      clerkId,
+    },
+    include: {
+      _count: {
+        select: {
+          followers: true,
+          following: true,
+          posts: true,
         },
-        include: {
-            _count: {
-                select: {
-                    followers: true,
-                    following: true,
-                    posts: true,
-                },
-            },
-        },
-    });
+      },
+    },
+  });
 }
-
 
 export async function getDbUserId() {
-    const { userId: clerkId} = await auth();
-    if(!clerkId) return null;
+  const { userId: clerkId } = await auth();
+  if (!clerkId) return null;
 
-    const user = await getUserByClerkId(clerkId);
+  const user = await getUserByClerkId(clerkId);
 
-    if(!user) throw new Error('User not found');
+  if (!user) throw new Error("User not found");
 
-    return user.id;
+  return user.id;
+}
+
+export async function getRandomUsers() {
+  try {
+    const userId = await getDbUserId();
+
+    if (!userId) return [];
+
+    // get 3 random users exclude ourselves & users that we already follow
+    const randomUsers = await prisma.user.findMany({
+      where: {
+        AND: [
+          { NOT: { id: userId } },
+          {
+            NOT: {
+              followers: {
+                some: {
+                  followerId: userId,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+  } catch (error) {
+    console.log("Error fetching random users", error);
+    return [];
+  }
 }
