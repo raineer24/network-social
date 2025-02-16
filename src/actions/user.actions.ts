@@ -84,6 +84,18 @@ export async function getRandomUsers() {
           },
         ],
       },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        image: true,
+        _count: {
+          select: {
+            followers: true,
+          },
+        },
+      },
+      take: 3,
     });
   } catch (error) {
     console.log("Error fetching random users", error);
