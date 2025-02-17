@@ -97,6 +97,8 @@ export async function getRandomUsers() {
       },
       take: 3,
     });
+
+    return randomUsers;
   } catch (error) {
     console.log("Error fetching random users", error);
     return [];
