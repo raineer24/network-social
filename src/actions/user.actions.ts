@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/lib/prisma";
 import { auth, currentUser, EmailAddress } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
@@ -151,6 +153,9 @@ export async function toggleFollow(targetUserId: string) {
         }),
       ]);
     }
+
+    revalidatePath('/');
+    return { success: true};
   } catch (error) {
     console.log("Error in toggleFollow", error);
     return { success: false, error: "Error toggling follow" };
