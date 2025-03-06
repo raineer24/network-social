@@ -74,7 +74,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
     if (isDeleting) return;
     try {
       setIsDeleting(true);
-      const result = await createComment(post.id, newComment);
+      const result = await deletePost(post.id);
       if (result?.success) {
         toast.success("Comment posted successfully");
         setNewComment("");

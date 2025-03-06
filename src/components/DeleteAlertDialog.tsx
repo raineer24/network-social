@@ -44,7 +44,7 @@ return (
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>
-                <AlertDialogHeader>{title}</AlertDialogHeader>
+                <AlertDialogTitle>{title}</AlertDialogTitle>
                 <AlertDialogDescription>{desciption}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
