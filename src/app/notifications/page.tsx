@@ -1,3 +1,5 @@
+"use client";
+
 import {
   getNotifications,
   markNotificationsAsRead,
@@ -137,3 +139,5 @@ function NotificationsPage() {
     </div>
   );
 }
+
+export default NotificationsPage;
