@@ -209,9 +209,8 @@ export async function deletePost(postId: string) {
 
     revalidatePath("/"); // purge the cache
     return { success: true };
-
   } catch (error) {
-    console.error('Failed to delete post', error);
-    return { success: false, error: 'Failed to delete post'};
+    console.error("Failed to delete post", error);
+    return { success: false, error: "Failed to delete post" };
   }
 }
