@@ -1,5 +1,6 @@
 "use client";
 
+import { getProfileByUsername, getUserPosts } from "@/actions/profile.action";
 import { toggleFollow } from "@/actions/user.action";
 import PostCard from "@/components/PostCard";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -29,3 +30,22 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+
+type User = Awaited<ReturnType<typeof getProfileByUsername>>;
+type Posts = Awaited<ReturnType<typeof getUserPosts>>;
+
+interface ProfilePageClientProps {
+    user: NonNullable<User>;
+    posts: Posts;
+    likedPosts: Posts;
+    isFollowing: boolean;
+}
+
+function ProfilePageClient({
+    isFollowing: initialIsFollowing,
+    likedPosts,
+    posts,
+    user,
+}: ProfilePageClientProps) {
+    
+}
