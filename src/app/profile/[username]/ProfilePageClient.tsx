@@ -1,6 +1,6 @@
 "use client";
 
-import { getProfileByUsername, getUserPosts } from "@/actions/profile.action";
+import { getProfileByUsername, getUserPosts, updateProfile } from "@/actions/profile.action";
 import { toggleFollow } from "@/actions/user.action";
 import PostCard from "@/components/PostCard";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -47,5 +47,53 @@ function ProfilePageClient({
     posts,
     user,
 }: ProfilePageClientProps) {
-    
+    const { user: currentUser } = useUser();
+    const [showEditDialog, setShowEditDialog ]= useState(false);
+    const [isFollowing, setIsFollowing ] = useState(initialIsFollowing);
+    const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
+
+    const [editForm, setEditForm] = useState({
+     name: user.name || "",
+     bio: user.bio || "",
+     location: user.location || "",
+     website: user.website || ""
+    });
+
+    const handleEditSubmit = async () => {
+        const formData = new FormData();
+        Object.entries(editForm).forEach(([key, value]) => {
+            formData.append(key,value);
+        });
+
+        const result = await updateProfile(formData);
+        if(result.success) {
+            setShowEditDialog(false);
+            toast.success('Profule updated successfully')
+        }
+    };
+
+    const handeFollow = async () => {
+        if (!currentUser) {
+            try {
+                setIsUpdatingFollow(true);
+                await toggleFollow(user.id);
+                setIsFollowing(!isFollowing);
+            } catch (error) {
+             toast.error('Failed to update follow status');
+            } finally {
+                setIsUpdatingFollow(false);
+            }
+        }
+    };
+
+    const isOwnProfile =
+        currentUser?.username === user.username ||
+        currentUser?.emailAddresses[0].emailAddress.split("@")[0] === user.username;
+
+    const formattedDate = format(new Date(user.createdAt), "MMM yyy");
+
+    return (
+        
+    )
+
 }
