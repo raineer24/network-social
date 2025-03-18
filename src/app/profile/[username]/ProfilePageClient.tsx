@@ -176,19 +176,79 @@ function ProfilePageClient({
                             </a>
                         </div>
                     )}
-                    <div className="flex">
+                    <div className="flex items-center text-muted-foreground">
                         <CalendarIcon className="size-4 mr-2"/>
                         Joined {formattedDate}
                     </div>
                 </div>
-
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* start of TABS */}
-        <Tabs></Tabs>
+        <Tabs defaultValue="posts" className="w-full">
+            <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
+                    <TabsTrigger
+                        value="posts"
+                        className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
+               data-[state=active]:bg-transparent px-6 font-semibold"
+                    >
+                        <FileTextIcon className="size-4"/>
+                        Posts
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="likes">
+                            className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
+                            data-[state=active]:bg-transparent px-6 font-semibold"
+                        <HeartIcon className="size-4"/>
+                        Likes
+                    </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="posts" className="mt-6">
+                <div className="space-y-6">
+                    {posts.length > 0 ? (
+                            posts.map((post) => <PostCard key={post.id} post={post} dbUserId={user.id}/>)
+                    ) : (
+                        <div className="text-center py-8 text-muted-foreground">No Posts yet</div>
+                    )}
+                </div>        
+            </TabsContent>
+
+            <TabsContent value="likes" className="mt-6">
+                <div className="space-y-6">
+                    {likedPosts.length > 0 ? (
+                        likedPosts.map((post) => <PostCard key={post.id} post={post} dbUserId={user.id}/>)
+                    ) :(
+                    <div className="text-center py-8 text-muted-foreground">No liked posts to show</div>
+                    )}
+                </div>
+            </TabsContent>
+        </Tabs>
+
+        <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+            <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                    <DialogTitle>Edit Profile</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                        <Label>Name</Label>
+                        <Input />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Bio</Label>
+                        <Textarea 
+                            name="bio"
+                            value={editForm.bio}
+                            onChange={(e) => setEditForm({ ...editForm, bio: e.target.value})}
+                            className="min-h-[100px]"
+                        />
+                    </div>
+                </div>
+            </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
