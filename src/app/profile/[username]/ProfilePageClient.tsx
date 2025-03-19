@@ -5,7 +5,7 @@ import {
   getUserPosts,
   updateProfile,
 } from "@/actions/profile.action";
-import { toggleFollow } from "@/actions/user.action";
+import { toggleFollow } from "@/actions/user.actions";
 import PostCard from "@/components/PostCard";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -116,70 +116,82 @@ function ProfilePageClient({
                 <div className="w-full mt-6">
                   <div className="flex justify-between mb-4">
                     <div>
-                        <div className="font-semibold">{user._count.following.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">Following</div>
+                      <div className="font-semibold">
+                        {user._count.following.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Following
+                      </div>
                     </div>
                     <Separator orientation="vertical" />
                     <div>
-                        <div className="font-semibold">{user._count.followers.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">Followers</div>
+                      <div className="font-semibold">
+                        {user._count.followers.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Followers
+                      </div>
                     </div>
                     <Separator orientation="vertical" />
                     <div>
-                        <div className="font-semibold">{user._count.posts.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">Posts</div>
+                      <div className="font-semibold">
+                        {user._count.posts.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-muted-foreground">Posts</div>
                     </div>
                   </div>
                 </div>
 
                 {/* "FOLLOW & EDIT PROFILE" BUTTONS */}
                 {!currentUser ? (
-                    <SignInButton mode="modal">
-                        <Button className="w-full mt-4">Follow</Button>
-                    </SignInButton>
-                ): isOwnProfile ? (
-                    <Button>
-                        <EditIcon className="size-4 mr-2" />
-                        Edit Profile
-                    </Button>
+                  <SignInButton mode="modal">
+                    <Button className="w-full mt-4">Follow</Button>
+                  </SignInButton>
+                ) : isOwnProfile ? (
+                  <Button>
+                    <EditIcon className="size-4 mr-2" />
+                    Edit Profile
+                  </Button>
                 ) : (
-                    <Button
-                        className="w-full mt-4"
-                        onClick={handleFollow}
-                        disabled={isUpdatingFollow}
-                        variant={isFollowing ? "outline" : "default"}
-                    >
-                        {isFollowing ? "Unfollow" : "Follow"}
-                    </Button>
+                  <Button
+                    className="w-full mt-4"
+                    onClick={handleFollow}
+                    disabled={isUpdatingFollow}
+                    variant={isFollowing ? "outline" : "default"}
+                  >
+                    {isFollowing ? "Unfollow" : "Follow"}
+                  </Button>
                 )}
 
                 {/* LOCATION & WEBSITE */}
                 <div className="w-full mt-6 space-y-2 text-sm">
-                    {user.location && (
-                        <div className="flex items-center text-muted-foreground">
-                            <MapPinIcon className="size-4 mr-2" />
-                            {user.location}
-                        </div>
-                    )}
-                    {user.website && (
-                        <div className="flex items-center text-muted-foreground">
-                            <LinkIcon className="size-4 mr-2" />
-                            <a 
-                            href={
-                                user.website.startsWith("http") ? user.website : `https://${user.website}`
-                            }
-                            className="hover:underline"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            >
-                                {user.website}
-                            </a>
-                        </div>
-                    )}
+                  {user.location && (
                     <div className="flex items-center text-muted-foreground">
-                        <CalendarIcon className="size-4 mr-2"/>
-                        Joined {formattedDate}
+                      <MapPinIcon className="size-4 mr-2" />
+                      {user.location}
                     </div>
+                  )}
+                  {user.website && (
+                    <div className="flex items-center text-muted-foreground">
+                      <LinkIcon className="size-4 mr-2" />
+                      <a
+                        href={
+                          user.website.startsWith("http")
+                            ? user.website
+                            : `https://${user.website}`
+                        }
+                        className="hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {user.website}
+                      </a>
+                    </div>
+                  )}
+                  <div className="flex items-center text-muted-foreground">
+                    <CalendarIcon className="size-4 mr-2" />
+                    Joined {formattedDate}
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -188,66 +200,122 @@ function ProfilePageClient({
 
         {/* start of TABS */}
         <Tabs defaultValue="posts" className="w-full">
-            <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
-                    <TabsTrigger
-                        value="posts"
-                        className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
+          <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
+            <TabsTrigger
+              value="posts"
+              className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
                data-[state=active]:bg-transparent px-6 font-semibold"
-                    >
-                        <FileTextIcon className="size-4"/>
-                        Posts
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value="likes">
-                            className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
-                            data-[state=active]:bg-transparent px-6 font-semibold"
-                        <HeartIcon className="size-4"/>
-                        Likes
-                    </TabsTrigger>
-            </TabsList>
+            >
+              <FileTextIcon className="size-4" />
+              Posts
+            </TabsTrigger>
+            <TabsTrigger value="likes">
+              className="flex items-center gap-2 rounded-none
+              data-[state=active]:border-b-2 data-[state=active]:border-primary
+              data-[state=active]:bg-transparent px-6 font-semibold"
+              <HeartIcon className="size-4" />
+              Likes
+            </TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="posts" className="mt-6">
-                <div className="space-y-6">
-                    {posts.length > 0 ? (
-                            posts.map((post) => <PostCard key={post.id} post={post} dbUserId={user.id}/>)
-                    ) : (
-                        <div className="text-center py-8 text-muted-foreground">No Posts yet</div>
-                    )}
-                </div>        
-            </TabsContent>
-
-            <TabsContent value="likes" className="mt-6">
-                <div className="space-y-6">
-                    {likedPosts.length > 0 ? (
-                        likedPosts.map((post) => <PostCard key={post.id} post={post} dbUserId={user.id}/>)
-                    ) :(
-                    <div className="text-center py-8 text-muted-foreground">No liked posts to show</div>
-                    )}
+          <TabsContent value="posts" className="mt-6">
+            <div className="space-y-6">
+              {posts.length > 0 ? (
+                posts.map((post) => (
+                  <PostCard key={post.id} post={post} dbUserId={user.id} />
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  No Posts yet
                 </div>
-            </TabsContent>
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="likes" className="mt-6">
+            <div className="space-y-6">
+              {likedPosts.length > 0 ? (
+                likedPosts.map((post) => (
+                  <PostCard key={post.id} post={post} dbUserId={user.id} />
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  No liked posts to show
+                </div>
+              )}
+            </div>
+          </TabsContent>
         </Tabs>
 
         <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-            <DialogContent className="sm:max-w-[500px]">
-                <DialogHeader>
-                    <DialogTitle>Edit Profile</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                        <Label>Name</Label>
-                        <Input />
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Bio</Label>
-                        <Textarea 
-                            name="bio"
-                            value={editForm.bio}
-                            onChange={(e) => setEditForm({ ...editForm, bio: e.target.value})}
-                            className="min-h-[100px]"
-                        />
-                    </div>
-                </div>
-            </DialogContent>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Edit Profile</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Name</Label>
+                <Input
+                  name="name"
+                  value={editForm.name}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, name: e.target.value })
+                  }
+                  placeholder="Your name"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Bio</Label>
+                <Textarea
+                  name="bio"
+                  value={editForm.bio}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, bio: e.target.value })
+                  }
+                  className="min-h-[100px]"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Bio</Label>
+                <Textarea
+                  name="bio"
+                  value={editForm.bio}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, bio: e.target.value })
+                  }
+                  className="min-h-[100px]"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Location</Label>
+                <Textarea
+                  name="location"
+                  value={editForm.location}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, location: e.target.value })
+                  }
+                  placeholder="Where are you  based?"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Website</Label>
+                <Textarea
+                  name="website"
+                  value={editForm.website}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, website: e.target.value })
+                  }
+                  placeholder="Your personal website"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-3">
+                <DialogClose asChild>
+                    <Button variant='outline'>Cancel</Button>
+                </DialogClose>
+                <Button onClick={handleEditSubmit}>Save Changes</Button>
+            </div>
+          </DialogContent>
         </Dialog>
       </div>
     </div>
