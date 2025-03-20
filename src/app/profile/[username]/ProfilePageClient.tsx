@@ -209,10 +209,12 @@ function ProfilePageClient({
               <FileTextIcon className="size-4" />
               Posts
             </TabsTrigger>
-            <TabsTrigger value="likes">
+            <TabsTrigger
+              value="likes"
               className="flex items-center gap-2 rounded-none
               data-[state=active]:border-b-2 data-[state=active]:border-primary
               data-[state=active]:bg-transparent px-6 font-semibold"
+            >
               <HeartIcon className="size-4" />
               Likes
             </TabsTrigger>
@@ -310,10 +312,10 @@ function ProfilePageClient({
               </div>
             </div>
             <div className="flex justify-end gap-3">
-                <DialogClose asChild>
-                    <Button variant='outline'>Cancel</Button>
-                </DialogClose>
-                <Button onClick={handleEditSubmit}>Save Changes</Button>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button onClick={handleEditSubmit}>Save Changes</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -321,3 +323,5 @@ function ProfilePageClient({
     </div>
   );
 }
+
+export default ProfilePageClient;
