@@ -1,6 +1,7 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { createRouteHandler } from "uploadthing/next";
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+import { ourFileRouter } from "./core";
+
+export const { GET, POST } = createRouteHandler({
+  router: ourFileRouter,
+});
