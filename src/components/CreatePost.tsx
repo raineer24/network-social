@@ -9,6 +9,7 @@ import { ImageIcon, Loader2Icon, SendIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { createPost } from "@/actions/post.action";
 import toast from "react-hot-toast";
+import ImageUpload from "./ImageUpload";
 
 function CreatePost() {
   const { user } = useUser();
@@ -22,23 +23,21 @@ function CreatePost() {
 
     setIsPosting(true);
     try {
-        const result = await createPost(content, imageUrl);
-        console.log('result', result);
-        if (result?.success) {
-            //reset the form
-            setContent("");
-            setImageUrl("");
-            setShowImageUpload(false);
+      const result = await createPost(content, imageUrl);
+      if (result?.success) {
+        // reset the form
+        setContent("");
+        setImageUrl("");
+        setShowImageUpload(false);
 
-            toast.success("Post created successfully");
-        }
+        toast.success("Post created successfully");
+      }
     } catch (error) {
-        console.log('Failed to create post:', error);
-        toast.error("Failed to create post");
+      console.error("Failed to create post:", error);
+      toast.error("Failed to create post");
     } finally {
-        setIsPosting(false);
+      setIsPosting(false);
     }
-
   };
 
   return (
@@ -47,7 +46,7 @@ function CreatePost() {
         <div className="space-y-4">
           <div className="flex space-x-4">
             <Avatar className="w-10 h-10">
-                <AvatarImage src={user?.imageUrl || '/avatar.png' } />
+              <AvatarImage src={user?.imageUrl || "/avatar.png"} />
             </Avatar>
             <Textarea
               placeholder="What's on your mind?"
@@ -58,45 +57,54 @@ function CreatePost() {
             />
           </div>
 
-          {/* bUTTON */}
+          {(showImageUpload || imageUrl) && (
+            <div className="border rounded-lg p-4">
+              <ImageUpload
+                endpoint="postImage"
+                value={imageUrl}
+                onChange={(url) => {
+                  setImageUrl(url);
+                  if (!url) setShowImageUpload(false);
+                }}
+              />
+            </div>
+          )}
 
           <div className="flex items-center justify-between border-t pt-4">
             <div className="flex space-x-2">
-                <Button 
-                className="text-muted-foreground hover:text-primary" 
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground hover:text-primary"
                 onClick={() => setShowImageUpload(!showImageUpload)}
-                type="button" 
-                variant='ghost' 
-                size='sm'
                 disabled={isPosting}
-                >
-                
-                        <ImageIcon className="size-4 mr-2" />Photo
-                </Button>
+              >
+                <ImageIcon className="size-4 mr-2" />
+                Photo
+              </Button>
             </div>
             <Button
-                className="flex items-center"
-                onClick={handleSubmit}
-                disabled={(!content.trim() && !imageUrl) || isPosting }
+              className="flex items-center"
+              onClick={handleSubmit}
+              disabled={(!content.trim() && !imageUrl) || isPosting}
             >
-                {isPosting ? (
-                    <>
-                    <Loader2Icon className="size-4 mr-2 animate-spin" />
-                    Posting...
-                    </>
-                ): (
-                    <>
-                    <SendIcon className="size-4 mr-2" />
-                    Post
-                    </>
-                )}
+              {isPosting ? (
+                <>
+                  <Loader2Icon className="size-4 mr-2 animate-spin" />
+                  Posting...
+                </>
+              ) : (
+                <>
+                  <SendIcon className="size-4 mr-2" />
+                  Post
+                </>
+              )}
             </Button>
           </div>
-
         </div>
       </CardContent>
     </Card>
   );
 }
-
 export default CreatePost;
